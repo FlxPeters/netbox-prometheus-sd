@@ -20,4 +20,3 @@ def test_writer(tmpdir):
     file_content = json.loads(path.read())
     assert file_content[0]["targets"] == ["10.10.10.10"]
     assert file_content[1]["targets"] == ["10.10.10.11"]
-

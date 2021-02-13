@@ -50,4 +50,3 @@ class HostList:
             if current.host_type == host.host_type and current.id == host.id:
                 return True
         return False
-

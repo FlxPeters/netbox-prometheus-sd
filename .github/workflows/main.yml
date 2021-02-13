@@ -1,0 +1,42 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install Poetry
+      uses: dschep/install-poetry-action@v1.2
+
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v1
+      id: cache
+      with:
+        path: ~/.virtualenvs
+        key: poetry-$
+        restore-keys: |
+          poetry-$
+
+    - name: Install Dependencies using Poetry
+      run: poetry install
+      if: steps.cache.outputs.cache-hit != 'true'
+
+    - name: Run pytest
+      run: PYTHONPATH=netbox_sd/ poetry run python -m pytest -v --cov=netbox_sd/ tests/
+
+    - name: Run Coverage
+      run: PYTHONPATH=netbox_sd/ poetry run python -m coverage report -m;
+
+    - name: Generate XML Report
+      run: PYTHONPATH=netbox_sd/ poetry run python -m coverage xml
