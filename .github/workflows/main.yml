@@ -33,10 +33,10 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Run pytest
-      run: PYTHONPATH=netbox_sd/ poetry run python -m pytest -v --cov=netbox_sd/ tests/
+      run: poetry run pytest --cov=netbox_sd tests/unit
 
     - name: Run Coverage
-      run: PYTHONPATH=netbox_sd/ poetry run python -m coverage report -m;
+      run: poetry run python -m coverage report -m;
 
     - name: Generate XML Report
-      run: PYTHONPATH=netbox_sd/ poetry run python -m coverage xml
+      run: poetry run python -m coverage xml
