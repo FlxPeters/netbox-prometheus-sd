@@ -1,5 +1,7 @@
 ## Netbox Prometheus SD
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 File based service discovery script for [Prometheus](https://prometheus.io/).
 Make virtual machines and devices managed in [Netbox](https://github.com/digitalocean/netbox) as Prometheus targets with labels.
 
