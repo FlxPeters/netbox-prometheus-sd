@@ -1,0 +1,139 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+scrape_configs:
+  ##########################
+  # Prometheus server metrics
+  #########################
+  - job_name: "prometheus"
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  ##########################
+  # Node Exporter
+  ##########################
+  - job_name: "node-exporter"
+    scrape_interval: 5s
+    file_sd_configs:
+      - files:
+          - /data/netbox/netbox.json
+        refresh_interval: 10s
+    relabel_configs:
+      # keep all targets labeled with __meta_netbox_service_node_exporter
+      - source_labels: [__meta_netbox_service_node_exporter]
+        action: keep
+        regex: .+
+      # Relabel to exporter port 9100
+      - source_labels: ["__meta_netbox_name"]
+        target_label: "__address__"
+        replacement: "${1}:9100"
+      # Keep system tag
+      # - source_labels: [__meta_netbox_tag_system]
+      #   target_label: system
+      # # Keep system tag
+      # - source_labels: [__meta_netbox_tenant]
+      #   target_label: tenant
+      # # Keep system tag
+      # - source_labels: [__meta_netbox_tag]
+      #   target_label: tag
+
+  ##########################
+  # Postgres Exporter
+  # ##########################
+  # - job_name: "postgres-exporter"
+  #   scrape_interval: 5s
+  #   file_sd_configs:
+  #     - files:
+  #         - /data/netbox/netbox.json
+  #       refresh_interval: 10s
+  #   relabel_configs:
+  #     - source_labels: [__meta_netbox_service_postgres_exporter]
+  #       action: keep
+  #       regex: .+
+  #     # Relabel to exporter port 9187
+  #     - source_labels: ["__meta_netbox_name"]
+  #       target_label: "__address__"
+  #       replacement: "${1}:9187"
+  #     # Keep system tag
+  #     - source_labels: [__meta_netbox_tag_system]
+  #       target_label: system
+  #     # Keep system tag
+  #     - source_labels: [__meta_netbox_tenant]
+  #       target_label: tenant
+
+  # ##########################
+  # # Traefik
+  # ##########################
+  # - job_name: "traefik"
+  #   scrape_interval: 5s
+  #   file_sd_configs:
+  #     - files:
+  #         - /data/netbox/netbox.json
+  #       refresh_interval: 10s
+  #   relabel_configs:
+  #     - source_labels: [__meta_netbox_service_traefik]
+  #       action: keep
+  #       regex: .+
+  #     # Relabel to exporter port 8080
+  #     - source_labels: ["__meta_netbox_name"]
+  #       target_label: "__address__"
+  #       replacement: "${1}:8080"
+  #     - source_labels: [__meta_netbox_tag_system]
+  #       target_label: system
+  #     - source_labels: [__meta_netbox_tenant]
+  #       target_label: tenant
+
+  # ##########################
+  # # Junos Exporter
+  # ##########################
+  # - job_name: junos-exporter
+  #   honor_timestamps: true
+  #   scrape_interval: 1m
+  #   scrape_timeout: 1m
+  #   metrics_path: /metrics
+  #   scheme: http
+  #   file_sd_configs:
+  #     - files:
+  #         - /data/netbox/netbox.json
+  #       refresh_interval: 10s
+  #   relabel_configs:
+  #     - source_labels: [__meta_netbox_platform]
+  #       action: keep
+  #       regex: "Junos.+"
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__meta_netbox_name]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: 10.10.7.25:9326
+  #     - source_labels: [__meta_netbox_platform]
+  #       target_label: platform
+  #     - source_labels: [__meta_netbox_tenant]
+  #       target_label: tenant
+
+  # ##########################
+  # # Netbox
+  # ##########################
+  # - job_name: "netbox"
+  #   scrape_interval: 5s
+  #   file_sd_configs:
+  #     - files:
+  #         - /data/netbox/netbox.json
+  #       refresh_interval: 10s
+  #   relabel_configs:
+  #     - source_labels: [__meta_netbox_service_netbox]
+  #       action: keep
+  #       regex: .+
+  #     # Relabel to exporter port 443
+  #     - source_labels: ["__meta_netbox_name"]
+  #       target_label: "__address__"
+  #       replacement: "${1}:443"
+  #     - source_labels: [__meta_netbox_tag_system]
+  #       target_label: system
+  #     - source_labels: [__meta_netbox_tenant]
+  #       target_label: tenant

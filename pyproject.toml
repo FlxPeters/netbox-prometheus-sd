@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "netbox-prometheus-sd"
+version = "0.1.0"
+description = "Servie discovery in Prometheus from Netbox"
+authors = ["Felix Peters <felix.peters@breuninger.de>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pynetbox = "^5.3.1"
+prometheus-client = "^0.9.0"
+environs = "^9.3.0"
+netaddr = "^0.8.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.2"
+pytest-docker-compose = "^3.2.1"
+black = "^20.8b1"
+pytest-cov = "^2.11.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

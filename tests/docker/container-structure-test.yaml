@@ -1,0 +1,14 @@
+schemaVersion: "2.0.0"
+
+metadataTest:
+  cmd: ["/app/netbox-prometheus-sd.py"]
+  workdir: "/data/netbox"
+  exposedPorts: ["8000"]
+  env:
+    - key: NETBOX_SD_FILE_PATH
+      value: /data/netbox/netbox.json
+    - key: NETBOX_SD_METRICS_PORT
+      value: "8000"
+
+  volumes:
+    - "/data/netbox"
