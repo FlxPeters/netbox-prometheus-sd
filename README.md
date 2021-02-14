@@ -1,8 +1,6 @@
 ## Netbox Prometheus SD
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) s
 [![CI](https://github.com/FlxPeters/netbox-prometheus-sd/workflows/CI/badge.svg?event=push)](https://github.com/FlxPeters/netbox-prometheus-sd/actions?query=workflow%3ACI)
 
 File based service discovery script for [Prometheus](https://prometheus.io/).
