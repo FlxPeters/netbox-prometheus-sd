@@ -38,10 +38,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Run pytest
-      run: poetry run pytest --cov=netbox_sd tests/unit
-
-    - name: Run Coverage
-      run: poetry run python -m coverage report -m;
+      run: poetry run pytest --junitxml=coverage.xml tests/unit
 
     - name: Generate XML Report
       run: poetry run python -m coverage xml
