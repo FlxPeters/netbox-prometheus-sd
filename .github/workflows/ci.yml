@@ -40,9 +40,6 @@ jobs:
     - name: Run pytest
       run: poetry run pytest --junitxml=coverage.xml tests/unit
 
-    - name: Generate XML Report
-      run: poetry run python -m coverage xml
-
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
