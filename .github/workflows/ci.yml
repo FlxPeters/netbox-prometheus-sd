@@ -38,7 +38,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Run pytest
-      run: poetry run pytest --junitxml=coverage.xml tests/unit
+      run: poetry run pytest --cov=netbox_sd --cov-report xml:test-results/coverage.xml --junitxml=test-results/results.xml tests/unit
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
