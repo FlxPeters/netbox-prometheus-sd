@@ -6,6 +6,8 @@
 hack
 venv
 .vscode 
+.scannerwork
+test-results
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
