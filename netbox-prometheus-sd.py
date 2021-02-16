@@ -24,8 +24,10 @@ class Config(object):
     netbox_url = env("NETBOX_SD_URL")
     netbox_token = env("NETBOX_SD_TOKEN")
     netbox_verify_ssl = env.bool("NETBOX_SD_VERIFY_SSL", True)
+    netbox_filter_json = env.json("NETBOX_FILTER", '{"status": "active"}')
     file_path = env.path("NETBOX_SD_FILE_PATH")
-    loop_delay = env.int("NETBOX_SD_LOOP_DELAY", 10)
+    netbox_threading = env.bool("NETBOX_THREADING", True)
+    loop_delay = env.int("NETBOX_SD_LOOP_DELAY", 60)
     log_level = env.log_level("NETBOX_SD_LOG_LEVEL", logging.INFO)
     metrics_port = env.int("NETBOX_SD_METRICS_PORT", 8000)
 
@@ -39,7 +41,9 @@ def setup_logging(config: Config):
 
 
 def create_netbox_client(config: Config):
-    netbox = pynetbox.api(config.netbox_url, config.netbox_token, threading=True)
+    netbox = pynetbox.api(
+        config.netbox_url, config.netbox_token, threading=config.netbox_threading
+    )
 
     session = requests.Session()
 
@@ -74,7 +78,7 @@ def main():
     while True:
 
         logging.debug(f"Populate from netbox")
-        inventory.populate()
+        inventory.populate(config.netbox_filter_json)
         logging.debug(f"Found {len(inventory.host_list.hosts)} targets")
 
         logging.debug(f"Write targest to {config.file_path}")

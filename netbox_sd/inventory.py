@@ -37,18 +37,20 @@ class NetboxInventory:
         self.host_list = HostList()
 
     @POPULATION_TIME.time()
-    def populate(self):
-        logging.debug("Clear host list")
+    def populate(self, filter):
         self.host_list.clear()
+        # filter = {"status": "active"}
+        logging.debug(f"Filter is :{filter}")
+
         try:
             NETBOX_REQUEST_COUNT_TOTAL.inc()
-            filter = {"status": "active"}
             vm_list = self.netbox.virtualization.virtual_machines.filter(**filter)
             logging.debug(f"Found {len(vm_list)} active virtual machines")
 
             for vm in vm_list:
                 # filter vms without primary ip
                 if not getattr(vm, "primary_ip4"):
+                    logging.debug(f"Drop vm '{vm.name}' due to missing primary IPv4")
                     continue
                 host = self._populate_host_from_netbox(vm, HostType.VIRTUAL_MACHINE)
                 # Add services
@@ -57,11 +59,14 @@ class NetboxInventory:
 
             # Get all active devices
             NETBOX_REQUEST_COUNT_TOTAL.inc()
-            device_list = self.netbox.dcim.devices.filter(status="active")
+            device_list = self.netbox.dcim.devices.filter(**filter)
             logging.debug(f"Found {len(device_list)} active devices")
             for device in device_list:
                 # filter devices without primary ip
                 if not getattr(device, "primary_ip4"):
+                    logging.debug(
+                        f"Drop device '{device.name}' due to missing primary IPv4"
+                    )
                     continue
                 host = self._populate_host_from_netbox(device, HostType.DEVICE)
                 # Add services
