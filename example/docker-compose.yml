@@ -9,6 +9,7 @@ services:
       NETBOX_SD_FILE_PATH: /data/netbox/netbox.json
       NETBOX_SD_LOG_LEVEL: "DEBUG"
       NETBOX_SD_VERIFY_SSL: "FALSE"
+      NETBOX_SD_LOOP_DELAY: "10"
     volumes:
       - "netbox-sd-data:/data/netbox"
 

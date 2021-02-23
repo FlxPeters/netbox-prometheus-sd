@@ -91,35 +91,35 @@ class NetboxInventory:
         # add labels if attribute is available
         if getattr(data, "tenant", None):
             host.add_label("tenant", data.tenant.name)
+            host.add_label("tenant_slug", data.tenant.slug)
             if data.tenant.group:
-                host.add_label("tenant_group", data.tenant.group.slug)
+                host.add_label("tenant_group", data.tenant.group.name)
+                host.add_label("tenant_group_slug", data.tenant.group.slug)
         if getattr(data, "site", None):
             host.add_label("site", data.site.name)
+            host.add_label("site_slug", data.site.slug)
         if getattr(data, "device_role", None):
-            host.add_label("role", data.device_role.name)
+            host.add_label("device_role", data.device_role.name)
+            host.add_label("device_role_slug", data.device_role.slug)
         if getattr(data, "cluster", None):
             host.add_label("cluster", data.cluster.name)
+            host.add_label("cluster_slug", data.cluster.slug)
         if getattr(data, "device_type", None):
-            host.add_label("type", data.device_type.model)
+            host.add_label("device_type", data.device_type.model)
+            host.add_label("device_type", data.device_type.slug)
         if getattr(data, "platform", None):
             host.add_label("platform", data.platform.name)
+            host.add_label("platform_slug", data.platform.slug)
 
         # Add custom attributes
         if getattr(data, "custom_fields", None):
             for key, value in data["custom_fields"].items():
                 host.add_label("custom_field_" + key, value)
 
-        # Add tags as labels
-
-        # todo: add a mapping for label to tag lookup
-        # some kind of config:
-        # - label: foo
-        #    tag: env_foo
-        #    regex: ""
-
-        # if getattr(data, "tags", None):
-        #     for tag in data.tags:
-        #         host.add_label("tag", tag)
+        # Add Tags as comma separated list
+        if getattr(data, "tags", None):
+            host.add_label("tags", ",".join([t.name for t in data.tags]))
+            host.add_label("tag_slugs", ",".join([t.slug for t in data.tags]))
 
         return host
 
