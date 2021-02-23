@@ -103,7 +103,6 @@ class NetboxInventory:
             host.add_label("device_role_slug", data.device_role.slug)
         if getattr(data, "cluster", None):
             host.add_label("cluster", data.cluster.name)
-            host.add_label("cluster_slug", data.cluster.slug)
         if getattr(data, "device_type", None):
             host.add_label("device_type", data.device_type.model)
             host.add_label("device_type", data.device_type.slug)
