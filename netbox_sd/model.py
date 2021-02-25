@@ -24,6 +24,7 @@ class Host:
 
     def add_label(self, key, value):
         """ Add a netbox prefixed meta label to the host """
+        key = key.replace("-", "_").replace(" ", "_")
         logging.debug(f"Add label '{key}' with value '{value}'")
         self.labels[f"%s_%s" % ("__meta_netbox", key)] = str(value)
 
