@@ -131,6 +131,11 @@ class NetboxInventory:
             f"Found {len(service_list)} services for virtual_machine={virtual_machine_id} or device={device_id}"
         )
         for service in service_list:
-            host.add_label(
-                "service_%s" % service.name, ",".join(str(x) for x in service.ports)
-            )
+            # netbox <= 2.9
+            if getattr(service, "port", None):
+                host.add_label("service_%s" % service.name, service.port)
+            # netbox >= 2.10
+            elif getattr(service, "ports", None):
+                host.add_label(
+                    "service_%s" % service.name, ",".join(str(x) for x in service.ports)
+                )
