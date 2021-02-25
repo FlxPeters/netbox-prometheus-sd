@@ -101,6 +101,9 @@ class NetboxInventory:
         if getattr(data, "device_role", None):
             host.add_label("device_role", data.device_role.name)
             host.add_label("device_role_slug", data.device_role.slug)
+        if getattr(data, "role", None):
+            host.add_label("role", data.role.name)
+            host.add_label("role_slug", data.role.slug)
         if getattr(data, "cluster", None):
             host.add_label("cluster", data.cluster.name)
         if getattr(data, "device_type", None):
@@ -109,6 +112,13 @@ class NetboxInventory:
         if getattr(data, "platform", None):
             host.add_label("platform", data.platform.name)
             host.add_label("platform_slug", data.platform.slug)
+
+        # Add site drom cluster if type is a VM
+        if host.host_type == HostType.VIRTUAL_MACHINE:
+            if getattr(data, "cluster", None):
+                if getattr(data.cluster, "site", None):
+                    host.add_label("site", data.cluster.site.name)
+                    host.add_label("site_slug", data.cluster.site.slug)
 
         # Add custom attributes
         if getattr(data, "custom_fields", None):
