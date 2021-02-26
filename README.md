@@ -8,6 +8,11 @@
 File based service discovery script for [Prometheus](https://prometheus.io/).
 Make virtual machines and devices managed in [Netbox](https://github.com/digitalocean/netbox) as Prometheus targets with labels.
 
+## Roadmap to 0.1
+
+- [ ] Add build process for tagged Docker builds
+- [ ] Add better unit tests
+
 ## Requirement
 
 - Python >= 3.7
@@ -52,6 +57,8 @@ service discovery:
 See `example` directory for an example on how this service discovery.
 Currently we use netboxdemo.com for this. This should be changed to a local Docker based Netbox stack.
 
-# Thanks & Credits
+## Thanks & Credits
 
-This project is based on a Script from ENIX SAS: https://github.com/enix/netbox-prometheus-sd / https://enix.io/fr/blog/service-discovery-avec-netbox-et-prometheus/
+This project is based on a Script from ENIX SAS:
+* https://github.com/enix/netbox-prometheus-sd
+* https://enix.io/fr/blog/service-discovery-avec-netbox-et-prometheus/
