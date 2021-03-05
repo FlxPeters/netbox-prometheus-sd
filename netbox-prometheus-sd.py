@@ -4,6 +4,7 @@ import logging
 import sys
 import os
 import time
+import signal
 
 from environs import Env
 from netbox_sd.inventory import NetboxInventory
@@ -89,5 +90,11 @@ def main():
         time.sleep(config.loop_delay)
 
 
+def terminate(signal, frame):
+    print("Terminating")
+    sys.exit(0)
+
+
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, terminate)
     main()
