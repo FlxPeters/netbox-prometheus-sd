@@ -98,9 +98,10 @@ class NetboxInventory:
         if getattr(data, "site", None):
             host.add_label("site", data.site.name)
             host.add_label("site_slug", data.site.slug)
+        # Normalize VM role and device role
         if getattr(data, "device_role", None):
-            host.add_label("device_role", data.device_role.name)
-            host.add_label("device_role_slug", data.device_role.slug)
+            host.add_label("role", data.device_role.name)
+            host.add_label("role_slug", data.device_role.slug)
         if getattr(data, "role", None):
             host.add_label("role", data.role.name)
             host.add_label("role_slug", data.role.slug)
