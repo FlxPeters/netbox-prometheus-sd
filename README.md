@@ -10,7 +10,7 @@ Make virtual machines and devices managed in [Netbox](https://github.com/digital
 
 ## Roadmap to 0.1
 
-- [ ] Add build process for tagged Docker builds
+- [x] Add build process for tagged Docker builds
 - [ ] Add better unit tests
 
 ## Requirement
