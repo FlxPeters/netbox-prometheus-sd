@@ -37,41 +37,59 @@ class NetboxInventory:
         self.host_list = HostList()
 
     @POPULATION_TIME.time()
-    def populate(self, filter):
+    def populate(self, filter, netbox_objects):
         self.host_list.clear()
         # filter = {"status": "active"}
         logging.debug(f"Filter is :{filter}")
-
         try:
-            NETBOX_REQUEST_COUNT_TOTAL.inc()
-            vm_list = self.netbox.virtualization.virtual_machines.filter(**filter)
-            logging.debug(f"Found {len(vm_list)} active virtual machines")
+            if 'vm' in netbox_objects:
+                NETBOX_REQUEST_COUNT_TOTAL.inc()
+                vm_list = self.netbox.virtualization.virtual_machines.filter(**filter)
+                logging.debug(f"Found {len(vm_list)} active virtual machines")
 
-            for vm in vm_list:
-                # filter vms without primary ip
-                if not getattr(vm, "primary_ip4"):
-                    logging.debug(f"Drop vm '{vm.name}' due to missing primary IPv4")
-                    continue
-                host = self._populate_host_from_netbox(vm, HostType.VIRTUAL_MACHINE)
-                # Add services
-                self._get_service_list_for_host(host, virtual_machine_id=vm.id)
-                self.host_list.add_host(host)
+                for vm in vm_list:
+                    # filter vms without primary ip
+                    if not getattr(vm, "primary_ip4"):
+                        logging.debug(f"Drop vm '{vm.name}' due to missing primary IPv4")
+                        continue
+                    host = self._populate_host_from_netbox(vm, HostType.VIRTUAL_MACHINE)
+                    # Add services
+                    self._get_service_list_for_host(host, virtual_machine_id=vm.id)
+                    self.host_list.add_host(host)
+            else:
+                logging.debug(f"skip vm population")
 
-            # Get all active devices
-            NETBOX_REQUEST_COUNT_TOTAL.inc()
-            device_list = self.netbox.dcim.devices.filter(**filter)
-            logging.debug(f"Found {len(device_list)} active devices")
-            for device in device_list:
-                # filter devices without primary ip
-                if not getattr(device, "primary_ip4"):
-                    logging.debug(
-                        f"Drop device '{device.name}' due to missing primary IPv4"
-                    )
-                    continue
-                host = self._populate_host_from_netbox(device, HostType.DEVICE)
-                # Add services
-                self._get_service_list_for_host(host, device_id=device.id)
-                self.host_list.add_host(host)
+            if 'device' in netbox_objects:
+                # Get all active devices
+                NETBOX_REQUEST_COUNT_TOTAL.inc()
+                device_list = self.netbox.dcim.devices.filter(**filter)
+                logging.debug(f"Found {len(device_list)} active devices")
+                for device in device_list:
+                    # filter devices without primary ip
+                    if not getattr(device, "primary_ip4"):
+                        logging.debug(
+                            f"Drop device '{device.name}' due to missing primary IPv4"
+                        )
+                        continue
+                    host = self._populate_host_from_netbox(device, HostType.DEVICE)
+                    # Add services
+                    self._get_service_list_for_host(host, device_id=device.id)
+                    self.host_list.add_host(host)
+            else:
+                logging.debug(f"skip device population")
+
+            if 'ip_address' in netbox_objects:
+                if len(netbox_objects) > 1:
+                    logging.warn(f"NETBOX_OBJECTS is set to {netbox_objects} which will lead to duplicated entries in the Prometheus servive discovery")
+                # Get all active devices
+                NETBOX_REQUEST_COUNT_TOTAL.inc()
+                ip_addresses_list = self.netbox.ipam.ip_addresses.filter(**filter)
+                logging.debug(f"Found {len(ip_addresses_list)} active ip addresses")
+                for ip_address in ip_addresses_list:
+                    host = self._populate_host_from_netbox(ip_address, HostType.IP_ADDRESS)
+                    self.host_list.add_host(host)
+            else:
+                logging.debug(f"skip ip_addresses population")
 
             HOST_GAUGE.set(len(self.host_list.hosts))
 
@@ -80,13 +98,14 @@ class NetboxInventory:
             logging.error(f"Failed to add target: {e}")
 
     def _populate_host_from_netbox(self, data: Record, host_type: HostType):
-        """ 
+        """
         Map values from netbox Records containing a virtual machine or device to a host object.
-        See https://pynetbox.readthedocs.io/en/latest/response.html for more details on records. 
+        See https://pynetbox.readthedocs.io/en/latest/response.html for more details on records.
         """
 
-        ip = str(netaddr.IPNetwork(data.primary_ip4.address).ip)
-        host = Host(data.id, data.name, ip, host_type=host_type)
+        ip = self._get_ip_from_record(data, host_type)
+        name = self._get_name_from_record(data, host_type)
+        host = Host(data.id, name, ip, host_type=host_type)
 
         # add labels if attribute is available
         if getattr(data, "tenant", None):
@@ -131,6 +150,11 @@ class NetboxInventory:
             host.add_label("tags", ",".join([t.name for t in data.tags]))
             host.add_label("tag_slugs", ",".join([t.slug for t in data.tags]))
 
+        # Add site drom cluster if type is a VM
+        if host.host_type == HostType.IP_ADDRESS:
+            if getattr(data, "dns_name", None):
+                host.add_label("dns_name", data.dns_name)
+
         return host
 
     def _get_service_list_for_host(self, host, virtual_machine_id=None, device_id=None):
@@ -150,3 +174,31 @@ class NetboxInventory:
                 host.add_label(
                     "service_%s" % service.name, ",".join(str(x) for x in service.ports)
                 )
+
+
+    def _get_ip_from_record(self, data: Record, host_type: HostType):
+        """
+        Extract IP address from netbox Records containing a virtual machine, device or ip-address.
+        See https://pynetbox.readthedocs.io/en/latest/response.html for more details on records.
+        """
+
+        if host_type == HostType.VIRTUAL_MACHINE or host_type == HostType.DEVICE:
+            return str(netaddr.IPNetwork(data.primary_ip4.address).ip)
+
+        if host_type == HostType.IP_ADDRESS:
+            return str(netaddr.IPNetwork(data.address).ip)
+
+    def _get_name_from_record(self, data: Record, host_type: HostType):
+        """
+        Extract name used as label __meta_netbox_name from netbox Records containing a virtual machine, device or ip-address.
+        See https://pynetbox.readthedocs.io/en/latest/response.html for more details on records.
+        """
+
+        if host_type == HostType.VIRTUAL_MACHINE or host_type == HostType.DEVICE:
+            return data.name
+
+        if host_type == HostType.IP_ADDRESS:
+            if getattr(data, "dns_name", None):
+                return data.dns_name
+            else:
+                return self._get_ip_from_record(data, host_type)
