@@ -150,7 +150,7 @@ class NetboxInventory:
             host.add_label("tags", ",".join([t.name for t in data.tags]))
             host.add_label("tag_slugs", ",".join([t.slug for t in data.tags]))
 
-        # Add site drom cluster if type is a VM
+        # Add dns_name if type is a IP_ADDRESS
         if host.host_type == HostType.IP_ADDRESS:
             if getattr(data, "dns_name", None):
                 host.add_label("dns_name", data.dns_name)
