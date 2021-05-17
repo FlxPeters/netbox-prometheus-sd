@@ -28,7 +28,11 @@ The app is configured with env variables.
     NETBOX_SD_FILE_PATH: /data/netbox/netbox.json
     NETBOX_SD_LOG_LEVEL: "DEBUG"
     NETBOX_SD_VERIFY_SSL: "FALSE"
-    
+    NETBOX_THREADING: "True"
+    NETBOX_SD_LOOP_DELAY: "60"
+    NETBOX_SD_METRICS_PORT: "8000"
+
+
 Filters are applied as JSON which is mapped to Netbox filter criterias.  
 See the Netbox for more Details: https://netbox.readthedocs.io/en/stable/rest-api/filtering/
 
