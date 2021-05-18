@@ -6,6 +6,7 @@ import logging
 class HostType(Enum):
     VIRTUAL_MACHINE = "vm"
     DEVICE = "device"
+    IP_ADDRESS = "ip_address"
 
 
 class Host:

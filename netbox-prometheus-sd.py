@@ -31,7 +31,7 @@ class Config(object):
     loop_delay = env.int("NETBOX_SD_LOOP_DELAY", 60)
     log_level = env.log_level("NETBOX_SD_LOG_LEVEL", logging.INFO)
     metrics_port = env.int("NETBOX_SD_METRICS_PORT", 8000)
-
+    netbox_objects = env("NETBOX_OBJECTS", "vm device").split()
 
 def setup_logging(config: Config):
     logging.basicConfig(
@@ -79,7 +79,7 @@ def main():
     while True:
 
         logging.debug(f"Populate from netbox")
-        inventory.populate(config.netbox_filter_json)
+        inventory.populate(config.netbox_filter_json, config.netbox_objects)
         logging.debug(f"Found {len(inventory.host_list.hosts)} targets")
 
         logging.debug(f"Write targest to {config.file_path}")

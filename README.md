@@ -20,15 +20,21 @@ Make virtual machines and devices managed in [Netbox](https://github.com/digital
 
 ## Config
 
-The app is configured with env variables. 
+The app is configured with env variables.
 
+```yaml
     NETBOX_SD_URL: https://netboxdemo.com
     NETBOX_SD_TOKEN:  72830d67beff4ae178b94d8f781842408df8069d
     NETBOX_FILTER: "{\"status\":\"active\",\"site\":\"ds9\"}"
     NETBOX_SD_FILE_PATH: /data/netbox/netbox.json
     NETBOX_SD_LOG_LEVEL: "DEBUG"
     NETBOX_SD_VERIFY_SSL: "FALSE"
-    
+    NETBOX_THREADING: "True"
+    NETBOX_SD_LOOP_DELAY: "60"
+    NETBOX_SD_METRICS_PORT: "8000"
+    NETBOX_OBJECTS: "vm device" # space separated list of netbox objects to discover. Currently supported: vm, device and ip_address
+```
+
 Filters are applied as JSON which is mapped to Netbox filter criterias.  
 See the Netbox for more Details: https://netbox.readthedocs.io/en/stable/rest-api/filtering/
 
