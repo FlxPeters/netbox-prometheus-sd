@@ -13,7 +13,7 @@ environs = "^9.3.2"
 netaddr = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.2"
+pytest = "^6.2.4"
 black = "^21.5b1"
 pytest-cov = "^2.12.0"
 
