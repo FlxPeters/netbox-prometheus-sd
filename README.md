@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/FlxPeters/netbox-prometheus-sd/workflows/CI/badge.svg?event=push)](https://github.com/FlxPeters/netbox-prometheus-sd/actions?query=workflow%3ACI)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FlxPeters_netbox-prometheus-sd&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=FlxPeters_netbox-prometheus-sd)
 [![Dockerhub](https://img.shields.io/docker/pulls/flxpeters/prometheus-netbox-sd.svg)](https://hub.docker.com/r/flxpeters/prometheus-netbox-sd)
 
 File based service discovery script for [Prometheus](https://prometheus.io/).
