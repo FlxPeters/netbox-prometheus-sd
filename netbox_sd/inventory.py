@@ -49,8 +49,8 @@ class NetboxInventory:
 
                 for vm in vm_list:
                     # filter vms without primary ip
-                    if not getattr(vm, "primary_ip4"):
-                        logging.debug(f"Drop vm '{vm.name}' due to missing primary IPv4")
+                    if not getattr(vm, "primary_ip"):
+                        logging.debug(f"Drop vm '{vm.name}' due to missing primary IP")
                         continue
                     host = self._populate_host_from_netbox(vm, HostType.VIRTUAL_MACHINE)
                     # Add services
@@ -66,9 +66,9 @@ class NetboxInventory:
                 logging.debug(f"Found {len(device_list)} active devices")
                 for device in device_list:
                     # filter devices without primary ip
-                    if not getattr(device, "primary_ip4"):
+                    if not getattr(device, "primary_ip"):
                         logging.debug(
-                            f"Drop device '{device.name}' due to missing primary IPv4"
+                            f"Drop device '{device.name}' due to missing primary IP"
                         )
                         continue
                     host = self._populate_host_from_netbox(device, HostType.DEVICE)
@@ -183,7 +183,7 @@ class NetboxInventory:
         """
 
         if host_type == HostType.VIRTUAL_MACHINE or host_type == HostType.DEVICE:
-            return str(netaddr.IPNetwork(data.primary_ip4.address).ip)
+            return str(netaddr.IPNetwork(data.primary_ip.address).ip)
 
         if host_type == HostType.IP_ADDRESS:
             return str(netaddr.IPNetwork(data.address).ip)
