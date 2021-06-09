@@ -5,17 +5,12 @@
 [![Dockerhub](https://img.shields.io/docker/pulls/flxpeters/prometheus-netbox-sd.svg)](https://hub.docker.com/r/flxpeters/prometheus-netbox-sd)
 
 File based service discovery script for [Prometheus](https://prometheus.io/).
-Make virtual machines and devices managed in [Netbox](https://github.com/digitalocean/netbox) as Prometheus targets with labels.
-
-## Roadmap to 0.1
-
-- [x] Add build process for tagged Docker builds
-- [ ] Add better unit tests
+Make virtual machines, IPs and devices managed from [Netbox](https://github.com/netbox-community/netbox) available as Prometheus targets with labels.
 
 ## Requirement
 
 - Python >= 3.7
-- [Pynetbox](https://github.com/digitalocean/pynetbox/).
+- [Pynetbox](https://github.com/netbox-community/pynetbox).
 
 ## Config
 

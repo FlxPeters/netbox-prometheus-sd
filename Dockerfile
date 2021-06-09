@@ -40,15 +40,6 @@ RUN poetry install --no-dev
 ###############################################
 FROM python-base as production
 
-LABEL maintainer="Breuninger Operations Core Tooling <ops-core-tooling@breuninger.de>" \
-  org.label-schema.build-date=${BUILD_DATE} \
-  org.label-schema.vcs-url="https://gitlab.breuni.de/itops/oct/netbox/netbox-prometheus-sd" \
-  org.label-schema.vcs-ref=${CI_COMMIT_SHA} \
-  org.label-schema.docker.dockerfile="/Dockerfile" \
-  org.label-schema.description="Prometheus file based service discovery for virtual machines and devices in Netbox." \
-  org.label-schema.vendor="E. Breuninger GmbH & Co" \
-  org.label-schema.schema-version="1.0"
-
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 
 COPY netbox-prometheus-sd.py /app/netbox-prometheus-sd.py
