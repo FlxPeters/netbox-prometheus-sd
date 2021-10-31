@@ -7,6 +7,8 @@
 File based service discovery script for [Prometheus](https://prometheus.io/).
 Make virtual machines, IPs and devices managed from [Netbox](https://github.com/netbox-community/netbox) available as Prometheus targets with labels.
 
+> **Deprecation** This project got obsolet since Prometheus supports HTTP based service discovery. Use https://github.com/FlxPeters/netbox-plugin-prometheus-sd as Netbox plugin to directly connect Prometheus with Netbox. I will still maintain this project based on the dependabot updates, but there will be no further feature development. 
+
 ## Requirement
 
 - Python >= 3.7
