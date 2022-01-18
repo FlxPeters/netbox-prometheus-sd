@@ -14,7 +14,7 @@ netaddr = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
-black = "^21.11b1"
+black = "^21.12b0"
 pytest-cov = "^3.0.0"
 
 [build-system]
