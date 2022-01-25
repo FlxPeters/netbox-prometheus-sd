@@ -23,9 +23,18 @@ class Host:
         self.labels["__meta_netbox_type"] = host_type.value
         self.labels["__meta_netbox_id"] = str(id)
 
+    @staticmethod
+    def promsafestr(labelval: str):
+        # add any special chars here that may appear in custom label names
+        specialChars = " -/\\!"
+        for specialChar in specialChars:
+            labelval = labelval.replace(specialChar, '_')
+        return labelval
+
     def add_label(self, key, value):
         """ Add a netbox prefixed meta label to the host """
-        key = key.replace("-", "_").replace(" ", "_")
+        key = self.promsafestr(key)
+        # key = key.replace("-", "_").replace(" ", "_").replace("/", "")
         logging.debug(f"Add label '{key}' with value '{value}'")
         self.labels[f"%s_%s" % ("__meta_netbox", key)] = str(value)
 

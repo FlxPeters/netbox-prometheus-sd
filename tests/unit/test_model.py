@@ -4,6 +4,7 @@ from netbox_sd.model import Host, HostList, HostType
 def test_host_labels():
     h = Host(1, "foo.bar.example.com", "10.10.10.10", HostType.VIRTUAL_MACHINE)
     h.add_label("custom_field_foo", "bar")
+    h.add_label("custom_field_foo/bar", "foobar")
     # h.add_label("tag_key", "value")
     # h.add_label("tag_complex", "tag:value")
     # h.add_label("tag_replaced-char", "dash")
@@ -14,6 +15,7 @@ def test_host_labels():
         "__meta_netbox_type": "vm",
         "__meta_netbox_id": "1",
         "__meta_netbox_custom_field_foo": "bar",
+        "__meta_netbox_custom_field_foo_bar": "foobar",
         # "__meta_netbox_tag_complex": "tag:value",
         # "__meta_netbox_tag_replaced_char": "dash",
     }
