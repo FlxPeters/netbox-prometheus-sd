@@ -9,7 +9,7 @@ license = "MIT"
 python = "^3.7"
 pynetbox = "^6.5.0"
 prometheus-client = "^0.13.0"
-environs = "^9.4.0"
+environs = "^9.5.0"
 netaddr = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
