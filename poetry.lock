@@ -239,7 +239,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pynetbox"
-version = "6.6.1"
+version = "6.6.2"
 description = "NetBox API client library"
 category = "main"
 optional = false
@@ -383,7 +383,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "dc44a807c2deefb36921d4af596f54996f6aa2d6c102e1882678777625c55478"
+content-hash = "bf215316c45637be7e44c2da9a5ae328b696d7449e22662ee7e988edd16aa794"
 
 [metadata.files]
 atomicwrites = [
@@ -531,8 +531,8 @@ py = [
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
 ]
 pynetbox = [
-    {file = "pynetbox-6.6.1-py3-none-any.whl", hash = "sha256:b88fb5a05d91b628aa6aa8c297a30fa18c945aabc9315ebc5025f835a2aac5d3"},
-    {file = "pynetbox-6.6.1.tar.gz", hash = "sha256:17b5754c607cc9f6befe39e39a188cf9d8c9ffcbf636fb75c5985bb8d01a0324"},
+    {file = "pynetbox-6.6.2-py3-none-any.whl", hash = "sha256:3202e5c253c1c1b5e53c42f8e5475552c068b816e214fe060d98673f7d78c16a"},
+    {file = "pynetbox-6.6.2.tar.gz", hash = "sha256:83b840aeaed49bacde6962d29f4550e4bd35b2e273e9f65c1f8cbe0883fe74db"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
